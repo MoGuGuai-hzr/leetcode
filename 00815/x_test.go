@@ -13,7 +13,7 @@ func TestT(t *testing.T) {
 	l.PushBack(2)
 	e := l.Back()
 	l.Remove(e)
-	for i := l.Front(); i != nil; i = i.Next() {
-		fmt.Println(i)
+	for i, j := l.Front(), l.Back(); i != j; i = i.Next() {
+		fmt.Println(i.Value)
 	}
 }
