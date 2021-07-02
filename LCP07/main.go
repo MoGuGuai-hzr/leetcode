@@ -11,9 +11,11 @@ func numWays(n int, relation [][]int, k int) int {
 	}
 	var dfs func(int, int)
 	dfs = func(x, step int) {
-		if step == k {
-			if x == n-1 {
-				ans++
+		if step == k-1 {
+			for _, y := range edges[x] {
+				if y == n-1 {
+					ans++
+				}
 			}
 			return
 		}
