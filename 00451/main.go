@@ -10,7 +10,7 @@ import (
 type list []node
 
 type node struct {
-	c     rune
+	c     byte
 	count int
 }
 
@@ -27,21 +27,19 @@ func (l *list) Swap(i, j int) {
 func frequencySort(s string) string {
 	l := make(list, 256)
 	for i := 0; i < len(l); i++ {
-		l[i].c = rune(i)
+		l[i].c = byte(i)
 	}
 	for _, c := range s {
 		l[c].count += 1
 	}
 	sort.Sort(&l)
-	b := bytes.NewBuffer(nil)
+	b := bytes.NewBuffer(make([]byte, 0, len(s)))
 	w := bufio.NewWriter(b)
 	for i := 0; i < len(l); i++ {
 		if l[i].count > 0 {
-			p := make([]byte, l[i].count)
-			for j := 0; j < len(p); j++ {
-				p[j] = byte(l[i].c)
+			for j := 0; j < l[i].count; j++ {
+				w.WriteByte(byte(l[i].c))
 			}
-			w.Write(p)
 		} else {
 			break
 		}
