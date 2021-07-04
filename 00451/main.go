@@ -25,7 +25,7 @@ func (l *list) Swap(i, j int) {
 }
 
 func frequencySort(s string) string {
-	l := make(list, 256)
+	l := make(list, 128)
 	for i := 0; i < len(l); i++ {
 		l[i].c = byte(i)
 	}
