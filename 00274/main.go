@@ -35,6 +35,25 @@ func hIndex(citations []int) int {
 	return c
 }
 
+func hIndex2(citations []int) (h int) {
+	n := len(citations)
+	counter := make([]int, n+1)
+	for _, citation := range citations {
+		if citation >= n {
+			counter[n]++
+		} else {
+			counter[citation]++
+		}
+	}
+	for i, tot := n, 0; i >= 0; i-- {
+		tot += counter[i]
+		if tot >= i {
+			return i
+		}
+	}
+	return 0
+}
+
 func main() {
 	for _, test := range []struct {
 		citations []int
@@ -46,6 +65,7 @@ func main() {
 		{[]int{10, 10}, 2},
 	} {
 		r := hIndex(test.citations)
-		fmt.Println(r, r == test.exp)
+		r2 := hIndex2(test.citations)
+		fmt.Println(r, r == test.exp, r2 == test.exp)
 	}
 }
