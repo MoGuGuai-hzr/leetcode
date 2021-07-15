@@ -45,85 +45,6 @@ func getSkyline(buildings [][]int) (ans [][]int) {
 	return
 }
 
-func getSkyline2(buildings [][]int) [][]int {
-	const (
-		Left   = 0
-		Right  = 1
-		Height = 2
-		X      = 0
-		Y      = 1
-	)
-
-	exp := [][]int{{buildings[0][Left], buildings[0][Height]}, {buildings[0][Right], Height}}
-
-	var l, r, n int
-	for index := 1; index < len(buildings); index++ {
-		building := buildings[index]
-		n = len(exp)
-
-		// 不相交
-		if building[Left] > exp[n-1][X] {
-			exp = append(exp, []int{building[Left], building[Height]})
-			exp = append(exp, []int{building[Right], 0})
-		} else if building[Left] == exp[n-1][X] {
-			// 相切
-			// 不等高
-			if building[Height] != exp[n-2][Y] {
-				exp[n-1][Y] = building[Height]
-				exp = append(exp, []int{building[Right], 0})
-			} else {
-				exp[n-1][X] = building[Right]
-			}
-		} else {
-			// 相交
-			l = sort.Search(n, func(i int) bool {
-				if exp[i][X] >= building[Left] {
-					return true
-				}
-				return false
-			})
-
-			if l-1 >= 0 && exp[l-1][Y] < building[Height] {
-				exp = append(exp[:l], append([][]int{{building[Left], building[Height]}}, exp[l:]...)...)
-				l += 1
-			}
-			n = len(exp)
-
-			r = sort.Search(n, func(i int) bool {
-				if exp[i][X] >= building[Right] {
-					return true
-				}
-				return false
-			})
-
-			if r >= n {
-				exp = append(exp, []int{building[Right], 0})
-			}
-
-			n = len(exp)
-
-			cnt := 0
-			for i := l; i < r; i++ {
-				t := i + cnt
-				if t > n {
-					t = n
-				}
-				copy(exp[i-cnt:i], exp[i:t])
-				if exp[i][Y] <= building[Height] {
-					cnt++
-					if i-1 >= 0 && exp[i-1][Y] > building[Height] {
-						cnt--
-						exp[l][Y] = building[Height]
-					}
-				}
-			}
-			exp = exp[:n-cnt]
-
-		}
-	}
-	return exp
-}
-
 func equal(rst, exp [][]int) bool {
 	if len(rst) != len(exp) {
 		return false
@@ -145,7 +66,7 @@ func main() {
 		{[][]int{{2, 9, 10}, {9, 12, 15}}, [][]int{{2, 10}, {9, 15}, {12, 0}}},
 		{[][]int{{1, 2, 1}, {1, 2, 2}, {1, 2, 3}}, [][]int{{2, 10}, {9, 15}, {12, 0}}},
 	} {
-		r := getSkyline2(test.buildutils)
+		r := getSkyline(test.buildutils)
 		fmt.Println(r, equal(r, test.skyline))
 	}
 }
