@@ -22,7 +22,7 @@ func reverseBetween2(head *ListNode, left int, right int) *ListNode {
 	}
 }
 
-func reverseBetween(head *ListNode, left int, right int) *ListNode {
+func reverseBetween1(head *ListNode, left int, right int) *ListNode {
 	var fackHead = new(ListNode)
 	fackHead.Next = head
 
@@ -41,4 +41,29 @@ func reverseBetween(head *ListNode, left int, right int) *ListNode {
 	}
 
 	return fackHead.Next
+}
+
+func reverseBetween(head *ListNode, left int, right int) *ListNode {
+	var fackHead = new(ListNode)
+	fackHead.Next = head
+
+	prev := fackHead
+	for i := 0; i < left-1; i++ {
+		prev = prev.Next
+	}
+
+	reverse(prev, right-left+1)
+
+	return fackHead.Next
+}
+
+func reverse(prev *ListNode, lenth int) (tail *ListNode) {
+	cur := prev.Next
+	for i := 1; i < lenth; i++ {
+		next := cur.Next
+		cur.Next = next.Next
+		next.Next = prev.Next
+		prev.Next = next
+	}
+	return cur
 }
